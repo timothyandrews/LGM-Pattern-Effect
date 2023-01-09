@@ -52,6 +52,7 @@ for bc in bcs:
    i=np.where(anc_new.data <= 0.0)
    anc_new.data[i]=0
    anc_new=anc_new/100. # convert % to fraction
+  ants.utils.coord.guess_bounds(anc_new.coord('time')) # add time bounds
   # Set the coordinate system to be the same as anc_existing since we do not have
   # any other information.
   coord_sys=anc_existing.coord("latitude").coord_system
@@ -61,7 +62,5 @@ for bc in bcs:
   anc_new=anc_new.regrid(anc_existing,iris.analysis.Linear())  
   # Give new SSTs same attributes as ones we know that work (e.g. stash code etc.)
   anc_new.attributes=anc_existing.attributes
-  # Remove time bounds if exist
-  anc_new.coord('time').bounds=None
   # Write out new ancil
   ants.fileformats.save(anc_new,bc+'_'+var+'.anc',saver="ancil")
